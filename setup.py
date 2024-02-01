@@ -364,7 +364,6 @@ def find_version(filepath: str) -> str:
 
 def get_vllm_version() -> str:
     version = find_version(get_path("vllm", "__init__.py"))
-    global nvcc_cuda_version
     if _is_hip():
         # Get the HIP version
         hipcc_version = get_hipcc_rocm_version()
@@ -378,7 +377,7 @@ def get_vllm_version() -> str:
             neuron_version_str = neuron_version.replace(".", "")[:3]
             version += f"+neuron{neuron_version_str}"
     else:
-        cuda_version = str(nvcc_cuda_version)
+        cuda_version = str(get_nvcc_cuda_version(CUDA_HOME))
         if cuda_version != MAIN_CUDA_VERSION:
             cuda_version_str = cuda_version.replace(".", "")[:3]
             version += f"+cu{cuda_version_str}"
